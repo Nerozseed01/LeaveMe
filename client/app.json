@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "LeveMe",
+    "slug": "LeveMe",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./src/Assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./src/Assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./src/Assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./src/Assets/favicon.png"
+    }
+  }
+}
