@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fb923c",
   },
   listContainer: {
-    height: "76%",
+    height: "83%",
   },
   separator: {
     height: 1,

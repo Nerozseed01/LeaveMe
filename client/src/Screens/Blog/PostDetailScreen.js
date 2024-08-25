@@ -168,7 +168,7 @@ const PostDetailScreen = () => {
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 50 : 0}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 50 : 50}
     >
       {loading ? (
         <Esqueleto />

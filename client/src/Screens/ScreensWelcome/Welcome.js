@@ -1,4 +1,4 @@
-import { View} from 'react-native'
+import { View, Text, Image} from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import ButtonPer from '../../Components/ButtonPersonalizado'
@@ -21,7 +21,7 @@ export default function Welcome() {
         </View>
         <Text
           className="text-black font-bold text-2xl text-center">
-          Let's Get Started!
+          Empieza el cambio en tu vida!
         </Text>
 
 

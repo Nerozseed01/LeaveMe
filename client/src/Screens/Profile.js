@@ -3,6 +3,7 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
+  PermissionsAndroid,
 } from "react-native";
 import React, { useState, useContext, useCallback, useMemo } from "react";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
@@ -16,6 +17,7 @@ import Toast from "react-native-toast-message";
 import { Chip } from "@rneui/themed";
 import ProfileSkeleton from "../Components/SkeletonProfile";
 import { SafeAreaView } from "react-native-safe-area-context";
+
 
 const FILENAME = "profilepic.jpg";
 const API_Url = process.env.API_URL;
@@ -73,12 +75,25 @@ export default function Profile() {
   );
 
   const selectPhoto = async () => {
+    let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      Toast.show({
+        type: "error",
+        text1: "Permiso denegado para acceder a la galería.",
+        visibilityTime: 2000,
+        autoHide: true,
+      });
+      return;
+    }
+
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: 1,
+      aspect: [1, 1],
       quality: 1,
     });
+
     if (!result.canceled) {
       let fotoPerfil = result.assets[0].uri;
       SaveImageLocal(fotoPerfil);
@@ -86,7 +101,7 @@ export default function Profile() {
       Toast.show({
         type: "error",
         text1: "No se seleccionó ninguna imagen.",
-        visibilityTime: 2000, // milisegundos
+        visibilityTime: 2000,
         autoHide: true,
       });
     }
@@ -152,7 +167,7 @@ export default function Profile() {
           >
             <Avatar.Accessory size={28} onPress={selectPhoto} />
           </Avatar>
-          <Text className="text-black text-4xl mt-5">
+          <Text className="text-black text-3xl mt-5 p-1 text-center">
             {user.nombreCompleto}
           </Text>
         </View>

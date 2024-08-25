@@ -39,7 +39,7 @@ export default function SignUp() {
     if (edad.trim().length === 0 || edad < "18") {
       Toast.show({
         type: "error",
-        text2: "Por favor ingresa una edad mayor a 15 años.",
+        text2: "Por favor ingresa una edad mayor a 18 años.",
         visibilityTime: 2000, // milisegundos
         autoHide: true,
       });
