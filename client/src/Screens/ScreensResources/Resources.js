@@ -75,7 +75,7 @@ export default function Resources() {
         return "school";
       case "Audiolibros":
         return "book";
-      case "Recreativo":
+      case "Recreativos":
         return "color-palette";
       default:
         return "document";
