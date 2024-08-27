@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext,useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -9,6 +9,9 @@ import {
 } from "react-native";
 import { EvilIcons } from "@expo/vector-icons";
 import { AuthContext } from "../context/authContext";
+import * as FileSystem from "expo-file-system";
+import Toast from "react-native-toast-message";
+const FILENAME = "profilepic.jpg";
 
 const postActions = (comments, likes, addLike, idPost) => {
   const theme = useColorScheme();
@@ -58,6 +61,30 @@ const PostContent = ({ post, onLikeToggle }) => {
   const handleLikePress = (event, idPost) => {
     event.stopPropagation(); // Previene que el evento se propague al Pressable padre
     onLikeToggle(idPost, idUser);
+  };
+
+  useEffect(() => {
+    fetchPhoto();
+  }, [post]);
+
+  const fetchPhoto = async () => {
+    try {
+      const exist = await FileSystem.getInfoAsync(
+        FileSystem.documentDirectory + FILENAME
+      );
+      console.log(exist.exists)
+      if (exist.exists && post.usuario.id == idUser) {
+        post.usuario.avatar = exist.uri;
+      }
+    } catch (error) {
+      console.error(error);
+      Toast.show({
+        type: "error",
+        text1: "No se pudo obtener la foto del usuario",
+        visibilityTime: 2000,
+        autoHide: true,
+      });
+    }
   };
 
   return (

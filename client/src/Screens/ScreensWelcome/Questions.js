@@ -102,8 +102,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f97316",
     borderRadius: 30,
     paddingVertical: 15,
-    marginBottom: 20,
-    width: 300,
+    marginBottom: 10,
   },
   titleStyle: {
     fontSize: 20,
@@ -111,7 +110,6 @@ const styles = StyleSheet.create({
     color: "black",
   },
   containerButton: {
-    width: 400,
-    marginBottom: 50,
+    width: 300,
   },
 });

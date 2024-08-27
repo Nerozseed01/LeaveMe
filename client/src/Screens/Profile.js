@@ -121,7 +121,7 @@ export default function Profile() {
     }
 
     try {
-      setPhoto(newPath); // Actualiza el estado con la nueva ruta de la imagen
+      setPhoto(uri); // Actualiza el estado con la nueva ruta de la imagen
       // Copia la nueva imagen
       await FileSystem.copyAsync({
         from: uri,

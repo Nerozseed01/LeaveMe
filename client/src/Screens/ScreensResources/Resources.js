@@ -1,12 +1,6 @@
-import React, { useState,useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  FlatList,
-} from "react-native";
+import { View, Text, StyleSheet, ScrollView, FlatList } from "react-native";
 import { Button, Divider } from "@rneui/themed";
 import Resource from "../../Components/Resource";
 import ResourceModal from "../../Components/ResourceModal";
@@ -32,15 +26,15 @@ export default function Resources() {
 
   const fetchResources = async () => {
     try {
-      const response = await axios.get(`${API_Url}/api/recursos/ObtenerRecursos`);
+      const response = await axios.get(
+        `${API_Url}/api/recursos/ObtenerRecursos`
+      );
       const data = response.data;
       if (response.status === 200) {
         const uniqueTags = [...new Set(data.map(resource => resource.tag))];
         setTags(uniqueTags);
         setResources(data);
       }
-
-     
     } catch (error) {
       const errorMessage = error.response.data.msg || error.message;
       console.error(error);
@@ -53,8 +47,8 @@ export default function Resources() {
     } finally {
       setLoading(false);
     }
-  }
-  const handleTagPress = (tag) => {
+  };
+  const handleTagPress = tag => {
     if (selectedTag === tag) {
       setSelectedTag(null);
     } else {
@@ -62,12 +56,12 @@ export default function Resources() {
     }
   };
 
-  const handleResourcePress = (resource) => {
+  const handleResourcePress = resource => {
     setSelectedResource(resource);
     setModalVisible(true);
   };
 
-  const getIconName = (tag) => {
+  const getIconName = tag => {
     switch (tag) {
       case "Podcast":
         return "headset";
@@ -83,19 +77,17 @@ export default function Resources() {
   };
 
   const filteredResources = selectedTag
-    ? resources.filter((resource) => resource.tag === selectedTag)
+    ? resources.filter(resource => resource.tag === selectedTag)
     : resources;
-  if(isLoading) return <ActivityIndicator size="large" />;
+  if (isLoading) return <ActivityIndicator size="large" />;
 
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         {/* Vista que contiene solo el encabezado */}
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>Recursos de ayuda</Text>
-        </View>
-        <Divider color="black" />
+        <Text style={styles.headerTitle}>Recursos de ayuda</Text>
       </SafeAreaView>
+      <Divider color="black" />
       {/* ScrollView de los tags, separado del SafeAreaView */}
       <ScrollView horizontal={true} style={styles.tagContainer}>
         {tags.map((item, index) => (
@@ -120,7 +112,7 @@ export default function Resources() {
               getIconName={getIconName}
             />
           )}
-          keyExtractor={(item) => item._id}
+          keyExtractor={item => item._id}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
           ListEmptyComponent={
             <Text style={styles.emptyListText}>
@@ -146,12 +138,10 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     backgroundColor: "#fff", // Fondo blanco para la SafeAreaView
-  },
-  header: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff", // Fondo blanco solo para el encabezado
   },
+
   headerTitle: {
     fontSize: 20,
     fontWeight: "bold",
@@ -173,7 +163,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fb923c",
   },
   listContainer: {
-    height: "83%",
+    height: "76%",
   },
   separator: {
     height: 1,

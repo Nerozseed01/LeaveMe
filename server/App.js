@@ -8,6 +8,7 @@ import userRoutes from './routes/userRoutes.js';
 import agendaRoutes from "./routes/agendaRoutes.js";
 import recursosRoutes from './routes/recursosRoutes.js';
 import postRoutes from './routes/postRoutes.js';
+import apiRecommendations from "./routes/recomendacionRoutes.js"
 import { connectDB } from './config/db.js';
 import { closeAgendasDaily } from './services/cronJobs.js';
 
@@ -33,6 +34,7 @@ app.use('/api/user', userRoutes);
 app.use('/api/agendas', agendaRoutes);
 app.use('/api/recursos', recursosRoutes);
 app.use('/api/posts', postRoutes);
+app.use("/api/recomendaciones",apiRecommendations)
 
 closeAgendasDaily(); // Cada día a las 20:58
 
