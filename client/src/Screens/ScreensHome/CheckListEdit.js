@@ -6,16 +6,17 @@ import {
   StyleSheet,
 } from "react-native";
 import axios from "axios";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext,useEffect } from "react";
 import EditTask from "../../Components/EditTask";
 import { ArrowLeftIcon } from "react-native-heroicons/solid";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Button,Divider } from "@rneui/themed";
+import { Button, Divider } from "@rneui/themed";
 import Toast from "react-native-toast-message";
 import AddTask from "../../Components/AddTasks";
-import { data } from "./data";
-import Ionicons from '@expo/vector-icons/Ionicons';
+import Ionicons from "@expo/vector-icons/Ionicons";
+import HomeScreenSkeleton from "../../Components/SqueletonTask";
+import { AuthContext } from "../../context/authContext";
 
 const API_Url = process.env.API_URL;
 
@@ -23,18 +24,25 @@ const CheckListEdit = ({ route }) => {
   const navigation = useNavigation();
   const { idAgenda, idUser } = route.params;
   const [activities, setActivities] = useState(route.params.activities);
+  const [isLoading, setIsLoading] = useState(false);
+  const { intereses, price_preference } = useContext(AuthContext);
+  const [recomendaciones, setRecomendaciones] = useState([]);
+
   const completadas =
-    activities.filter((activity) => activity.completed).length ===
+    activities.filter(activity => activity.completed).length ===
     activities.length
       ? true
       : false;
   const [actividadesNuevas, setActividadesNuevas] = useState([]);
 
+  useEffect(() => {
+    if(intereses && price_preference){
+      fetchRecomendaciones();
+    }
+  },[intereses])
 
   const toggledelete = async (id, actividad) => {
-    const existe = actividadesNuevas.some(
-      (item) => item.actividad === actividad
-    );
+    const existe = actividadesNuevas.some(item => item.actividad === actividad);
     try {
       if (!existe) {
         const response = await axios.delete(
@@ -43,7 +51,7 @@ const CheckListEdit = ({ route }) => {
         const msg = response.data.msg;
         const status = response.status;
         if (status === 200) {
-          setActivities(activities.filter((activity) => activity._id !== id));
+          setActivities(activities.filter(activity => activity._id !== id));
           Toast.show({
             type: "success",
             text1: msg,
@@ -53,10 +61,10 @@ const CheckListEdit = ({ route }) => {
         }
       } else {
         const newActividadesNuevas = actividadesNuevas.filter(
-          (item) => item.actividad !== actividad
+          item => item.actividad !== actividad
         );
         const newActivities = activities.filter(
-          (item) => item.actividad !== actividad
+          item => item.actividad !== actividad
         );
         setActividadesNuevas(newActividadesNuevas);
         setActivities(newActivities);
@@ -83,14 +91,14 @@ const CheckListEdit = ({ route }) => {
       ]);
     } else {
       const existe =
-        actividadesNuevas.some((item) => item.actividad === actividad) &&
-        activities.some((item) => item.actividad === actividad);
+        actividadesNuevas.some(item => item.actividad === actividad) &&
+        activities.some(item => item.actividad === actividad);
       if (existe) {
         const newActividadesNuevas = actividadesNuevas.filter(
-          (item) => item.actividad !== actividad
+          item => item.actividad !== actividad
         );
         const newActivities = activities.filter(
-          (item) => item.actividad !== actividad
+          item => item.actividad !== actividad
         );
         setActividadesNuevas(newActividadesNuevas);
         setActivities(newActivities);
@@ -118,11 +126,14 @@ const CheckListEdit = ({ route }) => {
       return;
     }
     try {
-      const response = await axios.put(`${API_Url}/api/agendas/ActualizarAgenda/${idAgenda}`,{
-        idUser,
-        nuevasActividades: actividadesNuevas,
-      });
-  
+      const response = await axios.put(
+        `${API_Url}/api/agendas/ActualizarAgenda/${idAgenda}`,
+        {
+          idUser,
+          nuevasActividades: actividadesNuevas,
+        }
+      );
+
       const msg = response.data.msg;
       const status = response.status;
       if (status === 200) {
@@ -148,6 +159,33 @@ const CheckListEdit = ({ route }) => {
     }
   };
 
+  const fetchRecomendaciones = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios.post(`${API_Url}/api/recomendaciones`, {
+        interests: intereses,
+        price_preference: parseInt(price_preference),
+      });
+      const data = response.data.recommendations;
+      if (response.status == 200) {
+        setRecomendaciones(data);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error("Error al actualizar", error);
+      const errorMessage = error.response.msg || "Ocurrió un error inesperado";
+      Toast.show({
+        type: "error",
+        text1: errorMessage,
+        visibilityTime: 2000, // milisegundos
+        autoHide: true,
+      });
+    }
+  };
+  if (isLoading) {
+    <HomeScreenSkeleton />;
+  }
+  console.log(recomendaciones);
   return (
     <View className="flex-1" style={styles.colorMain}>
       <SafeAreaView>
@@ -188,24 +226,33 @@ const CheckListEdit = ({ route }) => {
                 keyExtractor={(item, index) => index.toString()}
                 className="p-3"
               />
-              <Divider width={2}   />
+              <Divider width={2} />
             </>
           )}
         </View>
         <View style={{ height: "39%" }}>
-          <Text className="text-center text-xl">Añade Actividades Recomendadas</Text>
+          <View className="flex flex-row justify-around items-center">
+            <Text className="text-center text-xl">
+              Añade Actividades Recomendadas
+            </Text>
+            <TouchableOpacity onPress={() => fetchRecomendaciones()}>
+              <Ionicons name="reload" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
           <FlatList
-            data={data.filter(item => !activities.some(a => a.actividad === item.actividad))}
+            data={recomendaciones.filter(
+              item => !activities.some(a => a.actividad === item.activity)
+            )}
             className="p-3"
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => {
               const existe = actividadesNuevas.some(
-                (i) => i.actividad === item.actividad
+                i => i.actividad === item.activity
               );
               if (existe) {
                 return (
                   <AddTask
-                    actividad={item.actividad}
+                    actividad={item.activity}
                     handleAddTask={handleAddTask}
                     isAddTask={true}
                   />
@@ -213,7 +260,7 @@ const CheckListEdit = ({ route }) => {
               } else {
                 return (
                   <AddTask
-                    actividad={item.actividad}
+                    actividad={item.activity}
                     handleAddTask={handleAddTask}
                     isAddTask={false}
                   />

@@ -25,6 +25,12 @@ export const iniciarSesion = async (req, res) => {
       return res.status(401).json({ msg: "Contraseña incorrecta" });
     }
 
+    const usuarioConIntereses = await UserModel.findById(user._id)
+    .populate("intereses")
+    .exec();
+
+    const intereses = usuarioConIntereses.intereses.map(interes => interes.nombre)
+
     // Include only necessary user information in the payload (e.g., user ID)
     const payload = {
       user: {
@@ -53,7 +59,8 @@ export const iniciarSesion = async (req, res) => {
           user: {
             id: payload.user.id, // Solo se devuelve el ID del usuario
             nombre: user.nombreCompleto,
-            intereses: user.intereses // Solo se devuelve el nombre del usuario
+            intereses: intereses, // Solo se devuelve el nombre del usuario
+            price: user.preferenciasPrecio
           },
         });
       }
@@ -70,8 +77,6 @@ export const registrarUsuario = async (req, res) => {
    Usuario.correo = email.toLowerCase();
 
   try {
-
-
     const existingUser = await UserModel.findOne({ email: Usuario.correo });
     if (existingUser) {
       return res.status(409).json({ msg: "El correo electronico ya existe" });
@@ -89,6 +94,19 @@ export const registrarUsuario = async (req, res) => {
       preferenciasPrecio: Usuario.preferenciasPrecio,
       intereses: Usuario.intereses,
     });
+
+    if(!newUser){
+      return res.status(500).json({ msg: "Error al crear el usuario" });
+    }
+
+    const usuarioConIntereses = await UserModel.findById(newUser._id)
+    .populate("intereses")
+    .exec();
+
+    const intereses = usuarioConIntereses.intereses.map(interes => interes.nombre)
+
+
+
     // Crear el payload del token
     const payload = {
       user: {
@@ -118,7 +136,8 @@ export const registrarUsuario = async (req, res) => {
           user: {
             id: newUser._id,
             nombre: newUser.nombreCompleto,
-            intereses: newUser.intereses 
+            intereses: intereses,
+            price: newUser.preferenciasPrecio  
           },
         });
       }

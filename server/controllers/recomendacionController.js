@@ -14,7 +14,6 @@ export const getRecomendacion = async (req, res) => {
     if (!interests || !Array.isArray(interests) || interests.length === 0) {
       return res.status(400).json({ msg: "Se requiere un array de intereses" });
     }
-
     // Hacer la petición a la API
     const recommendations = await fetchRecommendations(
       interests,
@@ -28,7 +27,6 @@ export const getRecomendacion = async (req, res) => {
     const modifiedRecommendations = recommendations.map(rec => ({
       activity: rec.activity,
     }));
-
     res.json({ recommendations: modifiedRecommendations });
   } catch (error) {
     console.error("Error al obtener recomendaciones:", error.message);

@@ -6,25 +6,29 @@ import {
   StyleSheet,
   TextInput,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState,useEffect,useContext } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ArrowLeftIcon } from "react-native-heroicons/solid";
 import { useNavigation } from "@react-navigation/native";
 import AddTask from "../../Components/AddTasks";
 import Toast from "react-native-toast-message";
 import { Button, FAB, Dialog } from "@rneui/themed";
-import { data } from "./data";
+import { AuthContext } from "../../context/authContext";
 import axios from "axios";
+import HomeScreenSkeleton from "../../Components/SqueletonTask";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 const API_Url = process.env.API_URL;
 
 export default function AddActivities({ route }) {
   const navigation = useNavigation();
   const { idUser, token } = route.params;
-  const [ActividadesRecomendadas, setActividadesRecomendadas] = useState(data);
+  const [ActividadesRecomendadas, setActividadesRecomendadas] = useState();
+  const {intereses,price_preference} = useContext(AuthContext);
   const [actividadesAgenda, setActividadesAgenda] = useState([]);
   const [visible, setVisible] = useState(false);
   const [task, setTask] = useState("");
+  const [isLoading,setIsLoading]= useState(true)
   const palabrasProhibidas = [
     "sexo",
     "sex",
@@ -43,10 +47,39 @@ export default function AddActivities({ route }) {
     "maltrato",
     "abusar",
   ];
+  useEffect(() => {
+    if(intereses && price_preference){
+      fetchRecomendaciones();
+    }
+  },[intereses])
 
   const toggleDialog = () => {
     setVisible(!visible);
   };
+
+  const fetchRecomendaciones = async () => {
+    try {
+      const response = await axios.post(`${API_Url}/api/recomendaciones`, {
+        interests: intereses,
+        price_preference: parseInt(price_preference),
+      });
+      const data = response.data.recommendations;
+      if (response.status == 200) {
+        setActividadesRecomendadas(data);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error("Error al actualizar", error);
+      const errorMessage = error.response.msg || "Ocurrió un error inesperado";
+      Toast.show({
+        type: "error",
+        text1: errorMessage,
+        visibilityTime: 2000, // milisegundos
+        autoHide: true,
+      });
+    }
+  };
+
   // Función para verificar palabras prohibidas
   function contienePalabrasProhibidas(texto) {
     const regex = new RegExp(
@@ -94,10 +127,10 @@ export default function AddActivities({ route }) {
         return;
       }
       if (actividadesAgenda === undefined || actividadesAgenda.length === 0) {
-        setActividadesAgenda([{ actividad: activity }]);
+        setActividadesAgenda([{ activity: activity }]);
       } else {
         setActividadesAgenda([...actividadesAgenda, { actividad: activity }]);
-        setActividadesRecomendadas([...ActividadesRecomendadas,{ actividad: activity }]);
+        setActividadesRecomendadas([...ActividadesRecomendadas,{ activity: activity }]);
         setTask("");
         toggleDialog();
       }
@@ -149,16 +182,25 @@ export default function AddActivities({ route }) {
     }
   };
 
+  if(isLoading){
+    return (
+      <HomeScreenSkeleton />
+    )
+  }
+
   return (
     <View className="flex-1" style={styles.color}>
       <SafeAreaView>
-        <View className="flex-row space-x-56">
+        <View className="flex-row space-x-64">
           <TouchableOpacity
             onPress={() => navigation.goBack()}
             className="bg-orange-500 p-2 rounded-tr-2xl rounded-bl-2xl ml-4"
           >
             <ArrowLeftIcon size="20" color="black" />
           </TouchableOpacity>
+          <TouchableOpacity onPress={() => fetchRecomendaciones()}>
+              <Ionicons name="reload" size={30} color="black" />
+            </TouchableOpacity>
         </View>
         <View style={{ height: "86%" }} className="p-1">
           <Text className=" text-center text-xl font-semibold pb-2">
@@ -169,12 +211,12 @@ export default function AddActivities({ route }) {
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => {
               const existe = actividadesAgenda.some(
-                (i) => i.actividad === item.actividad
+                (i) => i.actividad === item.activity
               );
               if (existe) {
                 return (
                   <AddTask
-                    actividad={item.actividad}
+                    actividad={item.activity}
                     handleAddTask={handleAddTask}
                     isAddTask={true}
                   />
@@ -182,7 +224,7 @@ export default function AddActivities({ route }) {
               } else {
                 return (
                   <AddTask
-                    actividad={item.actividad}
+                    actividad={item.activity}
                     handleAddTask={handleAddTask}
                     isAddTask={false}
                   />

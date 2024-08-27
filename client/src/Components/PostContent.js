@@ -72,7 +72,6 @@ const PostContent = ({ post, onLikeToggle }) => {
       const exist = await FileSystem.getInfoAsync(
         FileSystem.documentDirectory + FILENAME
       );
-      console.log(exist.exists)
       if (exist.exists && post.usuario.id == idUser) {
         post.usuario.avatar = exist.uri;
       }

@@ -19,7 +19,8 @@ const AppNavigationDecision = () => {
           const idUser = await AsyncStorage.getItem("idUser");
           const nombreUser = await AsyncStorage.getItem("nombreUser");
           const intereses = await AsyncStorage.getItem("intereses");
-          login(token, {idUser, nombreUser, intereses}, true, "inicio");
+          const price = await AsyncStorage.getItem("price")
+          login(token, {idUser, nombreUser, intereses,price}, true, "inicio");
         }
       } else {
         logout();

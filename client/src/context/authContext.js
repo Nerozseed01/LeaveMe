@@ -12,6 +12,7 @@ export const AuthProvider = ({ children }) => {
   const [idUser, setIdUser] = useState("");
   const [authOrigin, setAuthOrigin] = useState("");
   const [intereses, setIntereses] = useState([]);
+  const [price_preference, setPricePreference] = useState(1)
   const [nombreUser, setNombreUsuario] = useState("");
 
   const login = async (receivedToken, dataUser, success,origen) => {
@@ -21,17 +22,20 @@ export const AuthProvider = ({ children }) => {
     setIdUser(dataUser.id);
     setNombreUsuario(dataUser.nombre);
     setIntereses(dataUser.intereses);
+    setPricePreference(dataUser.price)
     await AsyncStorage.setItem("token", receivedToken);
     await AsyncStorage.setItem("idUser", dataUser.id);
     await AsyncStorage.setItem("nombreUser", dataUser.nombre);
     await AsyncStorage.setItem("intereses", JSON.stringify(dataUser.intereses));
+    await AsyncStorage.setItem("price", JSON.stringify(dataUser.price))
   }
   if(origen === "inicio"){
     setIsAuthenticated(success);
     setToken(receivedToken);
     setIdUser(dataUser.idUser);
     setNombreUsuario(dataUser.nombreUser);
-    setIntereses(dataUser.intereses);
+    setIntereses(JSON.parse(dataUser.intereses));
+    setPricePreference(parseInt(dataUser.price))
   } 
   };
 
@@ -68,10 +72,12 @@ export const AuthProvider = ({ children }) => {
     setIdUser(receivedIdUser.id);
     setNombreUsuario(receivedIdUser.nombre);
     setIntereses(receivedIdUser.intereses);
+    setPricePreference(receivedIdUser.price)
     await AsyncStorage.setItem("token", receivedToken);
     await AsyncStorage.setItem("idUser", receivedIdUser.id);
     await AsyncStorage.setItem("nombreUser", receivedIdUser.nombre);
     await AsyncStorage.setItem("intereses", JSON.stringify(receivedIdUser.intereses));
+    await AsyncStorage.setItem("price", JSON.stringify(receivedIdUser.price))
   };
 
 
@@ -85,6 +91,7 @@ export const AuthProvider = ({ children }) => {
     setNombreUsuario("");
     setIntereses([]);
     setHasSelectedInterests(false);
+    setPricePreference(1)
     AsyncStorage.clear(); // Limpia los datos de almacenamiento persistente
   };
   // Función para verificar la expiración del token
@@ -121,6 +128,7 @@ export const AuthProvider = ({ children }) => {
         logout,
         porcentajeCompletado,
         nombreUser,
+        price_preference
       }}
     >
       {children}

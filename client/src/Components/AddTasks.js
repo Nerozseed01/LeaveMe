@@ -3,18 +3,18 @@ import React from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { CheckBox, Icon } from "@rneui/themed";
 
-export default function AddTask({
-  actividad,
-  isAddTask,
-  handleAddTask,
-}) {
+export default function AddTask({ actividad, isAddTask, handleAddTask }) {
   return (
     <TouchableOpacity
-      className="flex-row items-center justify-between mb-5 bg-white p-3 rounded-xl "
-      onPress={() => handleAddTask(actividad,"pred")}
-      style={{backgroundColor : isAddTask? "#d1d5db" : "white"  }}
+      className="flex-row items-center mb-5 bg-white p-3 rounded-xl"
+      onPress={() => handleAddTask(actividad, "pred")}
+      style={{ backgroundColor: isAddTask ? "#d1d5db" : "white" }}
     >
-      <Text className=" text-center text-lg  ">{actividad}</Text>
+      <View className="flex-1 mr-2">
+        <Text className="text-lg" numberOfLines={3} ellipsizeMode="tail">
+          {actividad}
+        </Text>
+      </View>
       <CheckBox
         checked={isAddTask}
         checkedColor="#f97316"

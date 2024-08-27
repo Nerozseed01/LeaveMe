@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Modal, TouchableWithoutFeedback } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Modal,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Button } from "@rneui/themed";
 
@@ -12,11 +19,19 @@ export default function EditTask({ _id, actividad, toggleDelete }) {
 
   return (
     <View style={styles.container} key={_id}>
-      <Text style={styles.activityText}>{actividad}</Text>
-      <TouchableOpacity onPress={toggleModal}>
+      <View style={styles.textContainer}>
+        <Text
+          style={styles.activityText}
+          numberOfLines={2}
+          ellipsizeMode="tail"
+        >
+          {actividad}
+        </Text>
+      </View>
+      <TouchableOpacity onPress={toggleModal} style={styles.iconContainer}>
         <MaterialIcons name="delete" size={25} color="grey" />
       </TouchableOpacity>
-      
+
       <Modal
         animationType="fade"
         transparent={true}
@@ -59,56 +74,62 @@ export default function EditTask({ _id, actividad, toggleDelete }) {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 20,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 12,
     borderRadius: 12,
   },
+  textContainer: {
+    flex: 1,
+    marginRight: 10,
+  },
   activityText: {
-    textAlign: 'center',
     fontSize: 18,
+  },
+  iconContainer: {
+    width: 30,
+    alignItems: "center",
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
   },
   modalContent: {
-    backgroundColor: '#E6E6FA',
+    backgroundColor: "#E6E6FA",
     borderRadius: 20,
     padding: 20,
-    alignItems: 'center',
-    shadowColor: '#000000',
+    alignItems: "center",
+    shadowColor: "#000000",
     shadowOpacity: 0.6,
     shadowRadius: 20,
     elevation: 5,
   },
   modalTitle: {
-    color: '#333333',
+    color: "#333333",
     fontSize: 20,
     marginBottom: 10,
   },
   modalText: {
-    color: '#666666',
+    color: "#666666",
     fontSize: 20,
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 20,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   deleteButton: {
-    color: 'red',
+    color: "red",
     fontSize: 20,
     marginRight: 20,
   },
   cancelButton: {
-    color: '#3b82f6',
+    color: "#3b82f6",
     fontSize: 20,
   },
 });
