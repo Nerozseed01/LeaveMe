@@ -1,30 +1,42 @@
 {
   "expo": {
     "name": "LeveMe",
-    "slug": "LeveMe",
+    "slug": "leveme",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/Assets/Icons/megafono.png",
+    "icon": "./src/Assets/Icons/IconoApp2.jpg",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./src/Assets/Icons/Icono.jpeg",
-      "resizeMode": "contain",
-      "backgroundColor": "#black"
+      "image": "./src/Assets/Icons/Leve.jpg",
+      "resizeMode": "cover",
+      "backgroundColor": "#9333ea"
+    },
+    "updates": {
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.leveme.app",
+      "buildNumber": "1.0.0",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "LeveMe necesita acceso a tu galeria para que puedas seleccionar una foto de perfil."
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./src/Assets/Icons/Icono.jpeg",
+        "foregroundImage": "./src/Assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.leveme.app",
+      "versionCode": 1,
+      "permissions": ["READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
     },
     "web": {
       "favicon": "./src/Assets/favicon.png"
-    }
+    },
+    "description": "LeveMe es una aplicación para descubrir y compartir eventos locales.",
+    "primaryColor": "#4287f5"
   }
 }

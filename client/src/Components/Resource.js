@@ -28,13 +28,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginHorizontal: 10,
     marginVertical: 5,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
+    boxShadow: "0px 20px 5px rgba(0, 0, 0, 0.6)",
     elevation: 4,
   },
   iconContainer: {

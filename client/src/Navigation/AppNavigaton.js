@@ -2,24 +2,25 @@ import React from "react";
 import { AuthProvider } from "../context/authContext";
 import AppNavigationDecision from "./appNavigationDesicion";
 import Toast, { BaseToast, ErrorToast } from "react-native-toast-message";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const toastConfig = {
   success: (props) => (
     <BaseToast
       {...props}
-      style={{ borderLeftColor: 'green' }}
+      style={{ borderLeftColor: "green" }}
       contentContainerStyle={{ paddingHorizontal: 15 }}
       text1Style={{
         fontSize: 17,
-        fontWeight: '400'
+        fontWeight: "400",
       }}
       text2Style={{
         fontSize: 13,
-        fontWeight: 'bold',
+        fontWeight: "bold",
         flex: 1,
-        flexWrap: 'wrap',
-        textAlignVertical: 'center',
-        textAlign: 'center',
+        flexWrap: "wrap",
+        textAlignVertical: "center",
+        textAlign: "center",
         paddingTop: 10,
       }}
       text2NumberOfLines={0}
@@ -30,15 +31,15 @@ const toastConfig = {
       {...props}
       text1Style={{
         fontSize: 17,
-        fontWeight: '400'
+        fontWeight: "400",
       }}
       text2Style={{
         fontSize: 13,
-        fontWeight: 'bold',
+        fontWeight: "bold",
         flex: 1,
-        flexWrap: 'wrap',
-        textAlignVertical: 'center',
-        textAlign: 'center',
+        flexWrap: "wrap",
+        textAlignVertical: "center",
+        textAlign: "center",
         paddingTop: 10,
       }}
       text2NumberOfLines={0}
@@ -49,13 +50,15 @@ const toastConfig = {
 export default function AppNavigation() {
   return (
     <AuthProvider>
-      <AppNavigationDecision />
-      <Toast
-        config={toastConfig}
-        position="top"
-        topOffset={50}
-        bottomOffset={40}
-      />
+      <SafeAreaProvider>
+        <AppNavigationDecision />
+        <Toast
+          config={toastConfig}
+          position="top"
+          topOffset={50}
+          bottomOffset={40}
+        />
+      </SafeAreaProvider>
     </AuthProvider>
   );
 }

@@ -288,13 +288,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#E8EAED",
   },
   buttonShadow: {
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.45,
-    shadowRadius: 7.4,
+    boxShadow: "0px 20px 5px rgba(0, 0, 0, 0.6)",
     elevation: 5, // Solo para Android
   },
 });

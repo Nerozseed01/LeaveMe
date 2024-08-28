@@ -3,6 +3,7 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
+  Platform
 } from "react-native";
 import React, { useState, useContext, useCallback, useMemo } from "react";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
@@ -73,8 +74,32 @@ export default function Profile() {
   );
 
   const selectPhoto = async () => {
-    let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
+    if (Platform.OS === 'android') {
+      Alert.alert(
+        'Permiso para acceder a la galería',
+        'Necesitamos tu permiso para acceder a la galería y seleccionar una foto de perfil.',
+        [
+          {
+            text: 'Cancelar',
+            style: 'cancel',
+          },
+          {
+            text: 'Aceptar',
+            onPress: async () => {
+              await requestPermission();
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    } else {
+      await requestPermission();
+    }
+  };
+  const requestPermission = async () => {
+    let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  
     if (permissionResult.granted === false) {
       Toast.show({
         type: "error",
@@ -84,14 +109,15 @@ export default function Profile() {
       });
       return;
     }
-
+  
+    // Código para seleccionar la imagen
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
     });
-
+  
     if (!result.canceled) {
       let fotoPerfil = result.assets[0].uri;
       SaveImageLocal(fotoPerfil);
@@ -104,6 +130,7 @@ export default function Profile() {
       });
     }
   };
+
 
   const SaveImageLocal = async uri => {
     const existingImagePath = `${FileSystem.documentDirectory}${FILENAME}`;
