@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import { View, Text, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRoute } from "@react-navigation/native";
@@ -7,11 +7,13 @@ import axios from "axios";
 import Toast from "react-native-toast-message";
 import { Chip, FAB } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../context/authContext";
 
 const API_Url = process.env.API_URL;
 
 function UpdateInterest() {
   const { userId, interesesUser } = useRoute().params;
+  const {UpdateInterests} = useContext(AuthContext);
   const navigation = useNavigation();
   const [selectedInterests, setSelectedInterests] = useState(interesesUser);
   const [interesesTodo, setInteresesTodo] = useState();
@@ -81,6 +83,8 @@ function UpdateInterest() {
       const status = response.status;
       const mesg = response.data.msg;
       if (status === 200) {
+        const update = selectedInterests.map(item => item.nombre)
+        UpdateInterests(update);
         setIsLoading(false);
         Toast.show({
           type: "success",

@@ -4,12 +4,12 @@
     "slug": "LeveMe",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/Assets/icon.png",
+    "icon": "./src/Assets/Icons/megafono.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./src/Assets/splash.png",
+      "image": "./src/Assets/Icons/Icono.jpeg",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#black"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -19,7 +19,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./src/Assets/adaptive-icon.png",
+        "foregroundImage": "./src/Assets/Icons/Icono.jpeg",
         "backgroundColor": "#ffffff"
       }
     },

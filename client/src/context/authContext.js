@@ -65,6 +65,11 @@ export const AuthProvider = ({ children }) => {
 
     return {mensajeAleatorio, porcentaje};
   };
+  const UpdateInterests = async(intereses) => {
+      setIntereses(intereses)
+      await AsyncStorage.removeItem("intereses")
+      await AsyncStorage.setItem("intereses", JSON.stringify(intereses))
+  }
 
   const register = async(receivedToken, receivedIdUser, success) => {
     setIsAuthenticated(success);
@@ -127,6 +132,7 @@ export const AuthProvider = ({ children }) => {
         register,
         logout,
         porcentajeCompletado,
+        UpdateInterests,
         nombreUser,
         price_preference
       }}

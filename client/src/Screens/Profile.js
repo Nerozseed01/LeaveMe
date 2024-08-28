@@ -3,7 +3,6 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  PermissionsAndroid,
 } from "react-native";
 import React, { useState, useContext, useCallback, useMemo } from "react";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
@@ -12,7 +11,6 @@ import axios from "axios";
 import { Avatar } from "@rneui/themed";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
-import Spinner from "react-native-loading-spinner-overlay";
 import Toast from "react-native-toast-message";
 import { Chip } from "@rneui/themed";
 import ProfileSkeleton from "../Components/SkeletonProfile";
@@ -35,10 +33,10 @@ const InterestList = React.memo(({ intereses }) => (
 ));
 
 export default function Profile() {
-  const { logout, token, idUser } = useContext(AuthContext);
+  const { logout, token, idUser,intereses } = useContext(AuthContext);
   const navigation = useNavigation();
   const [user, setUser] = useState(null);
-  const [intereses, setIntereses] = useState([]);
+  const [interesesUser, setIntereses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [photo, setPhoto] = useState(null);
 
@@ -147,9 +145,10 @@ export default function Profile() {
   };
 
   const memoizedInterestList = useMemo(
-    () => <InterestList intereses={intereses} />,
-    [intereses]
+    () => <InterestList intereses={interesesUser} />,
+    [interesesUser]
   );
+
 
   if (loading) {
     return <ProfileSkeleton />;
@@ -178,7 +177,7 @@ export default function Profile() {
         style={{ borderTopLeftRadius: 60, borderTopRightRadius: 60 }}
       >
         <Text className="text-2xl text-center mb-5">Tus Intereses</Text>
-        {intereses.length > 0 ? (
+        {interesesUser.length > 0 ? (
           <>
             {memoizedInterestList}
             <TouchableOpacity
@@ -186,7 +185,7 @@ export default function Profile() {
               onPress={() =>
                 navigation.navigate("UpdateInterest", {
                   userId: idUser,
-                  interesesUser: intereses,
+                  interesesUser: interesesUser,
                 })
               }
             >
