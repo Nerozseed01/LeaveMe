@@ -7,6 +7,7 @@ import SignupScreen from "../Screens/ScreensWelcome/SignUp"
 import { AuthContext } from "../context/authContext";
 import InterestsScreen from "../Screens/ScreensWelcome/SelectInteres";
 import Questions from './../Screens/ScreensWelcome/Questions';
+import ResetPassword from "../Screens/ScreensWelcome/ResetPassword";
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +44,11 @@ export default function StackGroupWelcome() {
         name="Questions"
         options={{ headerShown: false }}
         component={Questions}
+        />
+        <Stack.Screen
+        name="ResetPassword"
+        options={{ headerShown: false }}
+        component={ResetPassword}
         />
 
       </Stack.Navigator>

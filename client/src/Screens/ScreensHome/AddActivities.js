@@ -18,7 +18,7 @@ import axios from "axios";
 import HomeScreenSkeleton from "../../Components/SqueletonTask";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-const API_Url = process.env.API_URL;
+const API_Url = process.env.EXPO_PUBLIC_API_URL;
 
 export default function AddActivities({ route }) {
   const navigation = useNavigation();

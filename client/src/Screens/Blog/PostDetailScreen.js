@@ -23,7 +23,7 @@ import Toast from "react-native-toast-message";
 import Esqueleto from "../../Components/SqueletonFeed";
 import { AuthContext } from "../../context/authContext";
 
-const API_Url = process.env.API_URL;
+const API_Url = process.env.EXPO_PUBLIC_API_URL;
 
 
 const PostDetailScreen = () => {

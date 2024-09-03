@@ -20,7 +20,7 @@ import * as FileSystem from "expo-file-system";
 
 const FILENAME = "profilepic.jpg";
 
-const API_Url = process.env.API_URL;
+const API_Url = process.env.EXPO_PUBLIC_API_URL;
 
 export default function CreatePost() {
   const navigation = useNavigation();

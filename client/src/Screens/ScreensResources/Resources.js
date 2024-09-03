@@ -8,7 +8,7 @@ import axios from "axios";
 import { ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const API_Url = process.env.API_URL;
+const API_Url = process.env.EXPO_PUBLIC_API_URL;
 
 export default function Resources() {
   const [tags, setTags] = useState();

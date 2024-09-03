@@ -9,7 +9,7 @@ import { Chip, FAB } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../context/authContext";
 
-const API_Url = process.env.API_URL;
+const API_Url = process.env.EXPO_PUBLIC_API_URL;
 
 function UpdateInterest() {
   const { userId, interesesUser } = useRoute().params;

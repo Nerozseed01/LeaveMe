@@ -4,7 +4,6 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
-  ActivityIndicator,
 } from "react-native";
 import React, { useState, useContext, useCallback, useEffect } from "react";
 import Task from "../../Components/Task";
@@ -17,8 +16,9 @@ import Toast from "react-native-toast-message";
 import DialogFraseCompletada from "../../Components/DialogFraseCompletada";
 import HomeScreenSkeleton from "../../Components/SqueletonTask";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Constants from 'expo-constants';
 
-const API_Url = process.env.API_URL;
+const API_Url = process.env.EXPO_PUBLIC_API_URL;
 
 export default function Home() {
   const [activities, setActivities] = useState([]);

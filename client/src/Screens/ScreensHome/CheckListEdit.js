@@ -18,7 +18,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import HomeScreenSkeleton from "../../Components/SqueletonTask";
 import { AuthContext } from "../../context/authContext";
 
-const API_Url = process.env.API_URL;
+const API_Url = process.env.EXPO_PUBLIC_API_URL;
 
 const CheckListEdit = ({ route }) => {
   const navigation = useNavigation();

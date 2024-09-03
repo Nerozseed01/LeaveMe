@@ -19,7 +19,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 
 const FILENAME = "profilepic.jpg";
-const API_Url = process.env.API_URL;
+const API_Url = process.env.EXPO_PUBLIC_API_URL;
 
 const InterestList = React.memo(({ intereses }) => (
   <ScrollView>

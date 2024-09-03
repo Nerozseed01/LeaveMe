@@ -7,7 +7,6 @@ import {
   StatusBar,
   Keyboard,
   TouchableWithoutFeedback,
-  Platform,
 } from "react-native";
 import React, { useState, useContext } from "react";
 import { ArrowLeftIcon } from "react-native-heroicons/solid";
@@ -19,7 +18,7 @@ import axios from "axios";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const API_Url = process.env.API_URL;
+const API_Url = process.env.EXPO_PUBLIC_API_URL;
 
 export default function Login() {
   const { login } = useContext(AuthContext);
@@ -74,6 +73,7 @@ export default function Login() {
         visibilityTime: 2000, // milisegundos
         autoHide: true,
       });
+      throw error;
     }
   };
 
@@ -127,7 +127,7 @@ export default function Login() {
                 placeholder="Ingresa tu contraseña"
               ></TextInput>
 
-              <TouchableOpacity className="flex items-end  mb-5">
+              <TouchableOpacity className="flex items-end  mb-5" onPress={() => navigation.navigate("ResetPassword")}>
                 <Text className="text-orange-400 mt-1 font-semibold">
                   Forgot Password?
                 </Text>

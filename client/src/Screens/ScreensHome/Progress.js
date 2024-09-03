@@ -17,7 +17,7 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { AuthContext } from "../../context/authContext";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const API_Url = process.env.API_URL;
+const API_Url = process.env.EXPO_PUBLIC_API_URL;
 
 export default function Progress({ route }) {
   const { idUser } = route.params;
