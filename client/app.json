@@ -17,7 +17,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.leveme.app",
+      "bundleIdentifier": "",
       "buildNumber": "1.0.0",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "LeveMe necesita acceso a tu galeria para que puedas seleccionar una foto de perfil."
@@ -28,7 +28,7 @@
         "foregroundImage": "./src/Assets/Icons/IconApp.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.leveme.app",
+      "package": "",
       "versionCode": 1,
       "permissions": [
         "READ_EXTERNAL_STORAGE",
@@ -43,7 +43,7 @@
     "primaryColor": "#4287f5",
     "extra": {
       "eas": {
-        "projectId": "43218960-4aff-48d1-9b6a-c3de304fdaf7"
+        "projectId": ""
         
       }
     },
