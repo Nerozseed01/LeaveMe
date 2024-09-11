@@ -16,6 +16,7 @@ const Post = ({ post, onLikeToggle }) => {
       onPress={() => {
         navigation.navigate("Details", { post });
       }}
+      style={{ backgroundColor: "#E8EAED" }}
     >
       <PostContent post={post} onLikeToggle={handleLikeToggle} />
     </Pressable>

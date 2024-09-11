@@ -32,6 +32,7 @@ function SelectInteres({route}) {
           setInteresesTodo(data);
         }
       } catch (error) {
+        console.log(error)
         console.error(error);
         const errorMessage = error.response.data.msg || error.message;
         console.error(errorMessage);

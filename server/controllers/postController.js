@@ -95,6 +95,7 @@ export const mostrarTodosLosPosts = async (req, res) => {
         select: "nombreCompleto avatar",
       })
       .select("_id descripcion time megusta comentarios likesUsuarios")
+      .sort({ time: -1 })
       .exec();
 
     // Verificar si hay posts

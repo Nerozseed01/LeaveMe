@@ -1,20 +1,23 @@
 import {
-    View,
-    Text,
-    TouchableOpacity,
-    Image,
-    TextInput,
-    StatusBar,
-    Keyboard,
-    TouchableWithoutFeedback,
-    StyleSheet,
-  } from "react-native";
-  import React, { useState } from "react";
-  import { ArrowLeftIcon } from "react-native-heroicons/solid";
- 
-  import axios from "axios";
-  import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-  import { SafeAreaView } from "react-native-safe-area-context";
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  StatusBar,
+  Keyboard,
+  TouchableWithoutFeedback,
+  StyleSheet,
+} from "react-native";
+import React, { useState } from "react";
+import { ArrowLeftIcon } from "react-native-heroicons/solid";
+import axios from "axios";
+import validator from "validator";
+import Toast from "react-native-toast-message";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+const API_Url = process.env.EXPO_PUBLIC_API_URL;
 
 const ResetPassword = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -23,25 +26,98 @@ const ResetPassword = ({ navigation }) => {
   const [step, setStep] = useState(1);
 
   const requestCode = async () => {
+    if (!validator.isEmail(email)) {
+      Toast.show({
+        type: "success",
+        text1: "Ingresa un correo electrónico valido",
+        visibilityTime: 4000,
+      });
+    }
     try {
-      
-      setStep(2);
+      const response = await axios.post(
+        `${API_Url}/api/auth/recuperar-contrasena`,
+        {
+          email,
+        }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        Toast.show({
+          type: "success",
+          text2: data.msg,
+          visibilityTime: 4000,
+        });
+        setStep(2);
+      }
     } catch (error) {
-      Alert.alert("Error", "No se pudo enviar el código");
+      const errorMessage =
+        error.response.data.msg || "Ocurrió un error inesperado";
+      Toast.show({
+        type: "error",
+        text1: errorMessage,
+        visibilityTime: 2000, // milisegundos
+        autoHide: true,
+      });
+      throw error;
     }
   };
 
   const verifyCodeAndResetPassword = async () => {
-    try {
-      await axios.post("http://your-api-url/reset-password", {
-        email,
-        code,
-        newPassword,
+    if (!code) {
+      Toast.show({
+        type: "error",
+        text1: "Ingresa el código de verificación",
+        visibilityTime: 4000,
+      }); 
+      return;
+    }
+
+    if (!newPassword) {
+      Toast.show({
+        type: "error",
+        text1: "Ingresa una contraseña nueva",
+        visibilityTime: 4000,
       });
-      Alert.alert("Éxito", "Tu contraseña ha sido actualizada");
-      navigation.navigate("Login");
+      return;
+    }
+    if(newPassword.length < 6){
+      Toast.show({
+        type: "error",
+        text1: "La contraseña debe tener al menos 6 caracteres",
+        visibilityTime: 4000,
+      });
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${API_Url}/api/auth/cambiar-contrasena`,
+        {
+          token: code,
+          newPassword,
+        }
+      );
+
+      const data = response.data;
+      const status = response.status;
+      if (status === 200) {
+        Toast.show({
+          type: "success",
+          text2: data.msg,
+          visibilityTime: 4000,
+        });
+        navigation.navigate("Login");
+      }
     } catch (error) {
-      Alert.alert("Error", "No se pudo restablecer la contraseña");
+      const errorMessage =
+        error.response.data.msg || "Ocurrió un error inesperado";
+      Toast.show({
+        type: "error",
+        text2: errorMessage,
+        visibilityTime: 2000, // milisegundos
+        autoHide: true,
+      });
+      throw error;
     }
   };
 
@@ -79,7 +155,11 @@ const ResetPassword = ({ navigation }) => {
 
                 <View
                   className="flex-1 bg-white px-8 pt-8  "
-                  style={{ borderTopLeftRadius: 60, borderTopRightRadius: 60,height:500 }}
+                  style={{
+                    borderTopLeftRadius: 60,
+                    borderTopRightRadius: 60,
+                    height: 500,
+                  }}
                 >
                   <View className=" justify-center h-96">
                     <View className="form space-y-2">
@@ -109,7 +189,7 @@ const ResetPassword = ({ navigation }) => {
       )}
       {step === 2 && (
         <>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
               <View className="flex-1 bg-purple-400">
                 <SafeAreaView className="flex ">
@@ -139,39 +219,36 @@ const ResetPassword = ({ navigation }) => {
 
                 <View
                   className="flex-1 bg-white px-8 pt-8  "
-                  style={{ borderTopLeftRadius: 60, borderTopRightRadius: 60,height:500 }}
+                  style={{
+                    borderTopLeftRadius: 60,
+                    borderTopRightRadius: 60,
+                    height: 500,
+                  }}
                 >
-                    <View className="form space-y-2">
+                  <View className="form space-y-2">
                     <Text className="text-gray-700">Codigo</Text>
-                      <TextInput
-                        className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3"
-                        onChangeText={setCode}
-                        value={code}
-                        placeholder="Ingresa el codigo"
-                      ></TextInput>
-                      <Text className="text-gray-700">Email</Text>
-                      <TextInput
-                        className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3"
-                        onChangeText={setEmail}
-                        value={email}
-                        placeholder="Ingresa tu Email"
-                      ></TextInput>
-                      <Text className="text-gray-700">Nueva Contraseña</Text>
-                      <TextInput
-                        className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3"
-                        onChangeText={setNewPassword}
-                        value={newPassword}
-                        placeholder="Ingresa tu nueva contraseña"
-                      ></TextInput>
-                      <TouchableOpacity
-                        className="bg-orange-500 rounded-3xl py-4 active:bg-blue-700 "
-                        onPress={() => console.log("pressed")}
-                      >
-                        <Text className="text-center text-gray-800 font-bold font-xl">
-                          Cambiar contraseña
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
+                    <TextInput
+                      className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3"
+                      onChangeText={setCode}
+                      value={code}
+                      placeholder="Ingresa el codigo"
+                    ></TextInput>
+                    <Text className="text-gray-700">Nueva Contraseña</Text>
+                    <TextInput
+                      className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3"
+                      onChangeText={setNewPassword}
+                      value={newPassword}
+                      placeholder="Ingresa tu nueva contraseña"
+                    ></TextInput>
+                    <TouchableOpacity
+                      className="bg-orange-500 rounded-3xl py-4 active:bg-blue-700 "
+                      onPress={() => verifyCodeAndResetPassword()}
+                    >
+                      <Text className="text-center text-gray-800 font-bold font-xl">
+                        Cambiar contraseña
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
                 <StatusBar />
               </View>

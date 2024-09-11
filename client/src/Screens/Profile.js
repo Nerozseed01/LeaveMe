@@ -26,7 +26,7 @@ const InterestList = React.memo(({ intereses }) => (
     <View className="flex-row flex-wrap justify-center items-center">
       {intereses.map(item => (
         <View key={item._id} className="m-2">
-          <Chip title={item.nombre} />
+          <Chip title={item.nombre}  />
         </View>
       ))}
     </View>
