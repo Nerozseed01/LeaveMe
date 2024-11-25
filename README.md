@@ -1,5 +1,4 @@
-
-Mi contribución fue en la creación del "backend", diseño de vistas, API's
+My contribution was in the creation of the "backend", and view design
 tools:
 Node.Js(express Js)
 ReactNative
